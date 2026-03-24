@@ -124,6 +124,25 @@
             background: rgba(201, 169, 110, 0.3);
             color: #ECE7DF;
         }
+
+        /* Brand ticker */
+        .ticker-wrap {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+        .ticker-track {
+            display: flex;
+            width: max-content;
+            animation: tickerScroll 30s linear infinite;
+        }
+        .ticker-track:hover {
+            animation-play-state: running;
+        }
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
     </style>
 </head>
 <body class="font-montserrat font-light relative selection:bg-accent/30 selection:text-primary">
@@ -162,6 +181,21 @@
         </div>
     </section>
 
+    <!-- BRAND TICKER -->
+    <div class="relative z-10" style="background: #222220; border-top: 1px solid rgba(201,169,110,0.15); border-bottom: 1px solid rgba(201,169,110,0.15); padding: 1.5rem 0;">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 pl-6 md:pl-12 pr-8">
+                <span class="font-mono text-[9px] tracking-superwide text-accent/50 uppercase whitespace-nowrap">// IN THE ROOMS WITH</span>
+            </div>
+            <div class="ticker-wrap">
+                <div class="ticker-track">
+                    <span class="font-mono text-[11px] tracking-widest text-accent/70 whitespace-nowrap">Coinbase&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Polkadot&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Galaxy&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Near Foundation&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Dragonfly&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;OpenSea&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Electric Capital&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Blockworks&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Gauntlet&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;ETH Denver&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;ETH CC&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Soho House&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span class="font-mono text-[11px] tracking-widest text-accent/70 whitespace-nowrap">Coinbase&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Polkadot&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Galaxy&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Near Foundation&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Dragonfly&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;OpenSea&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Electric Capital&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Blockworks&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Gauntlet&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;ETH Denver&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;ETH CC&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;Soho House&nbsp;&nbsp;<span class="text-accent/40">&middot;</span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 02 THE REALITY -->
     <section class="py-32 md:py-48 px-6 border-b border-border-warm relative">
         <div class="max-w-4xl mx-auto reveal">
@@ -177,14 +211,8 @@
                 <p class="font-playfair text-2xl md:text-3xl lg:text-4xl text-primary leading-[1.5] md:leading-[1.4]">
                     So you keep going. Because that is what got you here.
                 </p>
-                <p class="font-montserrat text-muted text-base md:text-lg leading-loose">
-                    But there is a version of you that is executing at full speed and feeling increasingly hollow. Making decisions from pressure instead of conviction. Achieving the milestones and still feeling like something is missing.
-                </p>
-                <p class="font-montserrat text-muted text-base md:text-lg leading-loose">
-                    Your nervous system has been in threat mode so long it does not remember what calm feels like.
-                </p>
                 <p class="font-playfair text-xl md:text-2xl text-accent italic leading-[1.5]">
-                    That is not a weakness. That is what this industry does to people who give a damn.
+                    But your nervous system has been in threat mode so long it does not remember what calm feels like. That is not a weakness. That is what this industry does to people who give a damn.
                 </p>
             </div>
         </div>
@@ -202,19 +230,13 @@
                 <div class="w-full lg:w-1/2">
                     <div class="space-y-6 text-muted text-base leading-loose font-montserrat">
                         <p>
-                            I came into Web3 with no technical background. No crypto experience. No whitepaper knowledge.
+                            I came into Web3 with no technical background. No crypto experience. No whitepaper knowledge. Within 18 months I was one of the most recognized connectors and recruiters in the space.
                         </p>
                         <p>
-                            Within 18 months I was one of the most recognized connectors and recruiters in the space. Not because I knew the most. Because I showed up the most honestly.
+                            I did the full conference circuit. Spoke at ETH Denver and ETH CC. Built real relationships with teams at Dragonfly, Optimism, OpenSea, Electric Capital, Blockworks and more. DJed for Coinbase, Polkadot, Galaxy, and Near Foundation.
                         </p>
                         <p>
-                            I did the full conference circuit. Spoke at ETH Denver and ETH CC. Hosted dinners, ran events, built real relationships with teams at Dragonfly, Optimism, OpenSea, Electric Capital, Blockworks, Gauntlet, CoinFund and more. DJed for Coinbase, Polkadot, Galaxy, and Near Foundation.
-                        </p>
-                        <p>
-                            I also know what that pace costs.
-                        </p>
-                        <p>
-                            I have generated $10M+ in revenue across high-performance environments. I have competed as an athlete for 18 years. I have built companies from nothing. And I have hit the wall that every high-performer eventually hits when they never stop long enough to recover.
+                            I also know what that pace costs. I have hit the wall that every high-performer eventually hits when they never stop long enough to recover.
                         </p>
                         <p>
                             Burnout is not a motivation problem. It is a nervous system problem. I learned that the hard way. And now it is the only thing I work on.
@@ -274,7 +296,7 @@
                     <div class="font-mono tracking-widest text-[10px] text-accent mb-8">PHASE_01</div>
                     <h4 class="font-playfair text-2xl md:text-3xl text-primary mb-6 group-hover:text-accent transition-colors">Regulate</h4>
                     <p class="font-montserrat text-muted text-sm leading-loose flex-grow mb-12">
-                        Calm the nervous system first. Exit survival mode. Performance built on adrenaline collapses and in this industry, adrenaline is the default fuel. We build on regulation instead.
+                        Exit survival mode. Performance built on adrenaline collapses and in this industry, adrenaline is the default fuel.
                     </p>
                     <div class="pt-6 border-t border-border-warm mt-auto">
                         <span class="font-mono tracking-widest text-[9px] text-primary/70 uppercase">OUTCOME: NERVOUS SYSTEM RESTORED</span>
@@ -286,7 +308,7 @@
                     <div class="font-mono tracking-widest text-[10px] text-accent mb-8">PHASE_02</div>
                     <h4 class="font-playfair text-2xl md:text-3xl text-primary mb-6 group-hover:text-accent transition-colors">Clarity</h4>
                     <p class="font-montserrat text-muted text-sm leading-loose flex-grow mb-12">
-                        A full audit of where you actually are across career, finances, health, relationships, and environment. When you stop reacting long enough to look honestly at your life, the right decisions become obvious.
+                        A full audit of where you actually are across career, finances, health, relationships, and environment.
                     </p>
                     <div class="pt-6 border-t border-border-warm mt-auto">
                         <span class="font-mono tracking-widest text-[9px] text-primary/70 uppercase">OUTCOME: BLIND SPOTS IDENTIFIED</span>
@@ -298,7 +320,7 @@
                     <div class="font-mono tracking-widest text-[10px] text-accent mb-8">PHASE_03</div>
                     <h4 class="font-playfair text-2xl md:text-3xl text-primary mb-6 group-hover:text-accent transition-colors">Execute</h4>
                     <p class="font-montserrat text-muted text-sm leading-loose flex-grow mb-12">
-                        From alignment, not adrenaline. We install your non-negotiables, build your sustainable rhythm, and align your highest-leverage actions with your energy. You leave with a 30-day execution plan that is yours to keep. Structure that works for your life, not against it.
+                        We install your non-negotiables, build your sustainable rhythm, and align your highest-leverage actions with your energy.
                     </p>
                     <div class="pt-6 border-t border-border-warm mt-auto">
                         <span class="font-mono tracking-widest text-[9px] text-primary/70 uppercase">OUTCOME: SUSTAINABLE EXECUTION INSTALLED</span>
