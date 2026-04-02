@@ -6,6 +6,18 @@
     <title>The Reset Protocol</title>
     <meta name="description" content="The antidote to every overstimulating crypto and coaching website in the space. Private performance coaching for Web3 founders who are busy but lost.">
     <link rel="icon" type="image/png" href="resetprotocol/assets/logo.png">
+    <!-- Open Graph -->
+    <meta property="og:title" content="The Reset Protocol">
+    <meta property="og:description" content="Private performance coaching for Web3 founders who are busy but lost. Three weeks. Three phases. One system built around you.">
+    <meta property="og:image" content="https://theresetprotocol.xyz/resetprotocol/assets/logo.png">
+    <meta property="og:url" content="https://theresetprotocol.xyz">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="The Reset Protocol">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="The Reset Protocol">
+    <meta name="twitter:description" content="Private performance coaching for Web3 founders who are busy but lost. Three weeks. Three phases. One system built around you.">
+    <meta name="twitter:image" content="https://theresetprotocol.xyz/resetprotocol/assets/logo.png">
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -157,9 +169,9 @@
                 <img src="resetprotocol/assets/logo.png" alt="The Reset Protocol" style="height: 28px; width: auto;">
                 <span class="font-heading text-sm font-semibold tracking-widest text-primary uppercase hidden sm:inline">THE RESET PROTOCOL</span>
             </a>
-            <div class="flex items-center gap-3">
-                <a href="case-study.html" class="btn-ghost btn-ghost-subtle !py-3 !px-6 !text-[0.65rem]">CASE STUDY</a>
-                <a href="#apply" class="btn-ghost !py-3 !px-8 !text-[0.65rem]">APPLY</a>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="case-study.html" class="btn-ghost btn-ghost-subtle !py-2 !px-4 sm:!py-3 sm:!px-6 !text-[0.55rem] sm:!text-[0.65rem]">CASE STUDY</a>
+                <a href="#apply" class="btn-ghost !py-2 !px-5 sm:!py-3 sm:!px-8 !text-[0.55rem] sm:!text-[0.65rem]">APPLY</a>
             </div>
         </div>
     </nav>
@@ -189,9 +201,15 @@
             </div>
         </div>
 
-        <!-- RIGHT: Photo (40%) — hidden on mobile -->
+        <!-- Mobile photo — shown below text on small screens -->
+        <div class="block lg:hidden w-full relative mt-4 px-6" style="max-height: 400px; overflow: hidden;">
+            <img src="brand assets/Website Images/remi-coach.jpg" alt="Remington Rodney" class="w-full object-cover" style="object-position: top center; max-height: 400px;">
+            <div class="absolute bottom-0 left-0 right-0 h-24 pointer-events-none" style="background: linear-gradient(to top, #0D0D0D, transparent);"></div>
+        </div>
+
+        <!-- RIGHT: Photo (40%) — desktop only -->
         <div class="hidden lg:block absolute right-0 top-0 bottom-0 w-[40%] overflow-hidden">
-            <img src="brand assets/Website Images/remi-coach.jpg" alt="Remington L. Rodney" class="w-full h-full object-cover" style="object-position: top center;">
+            <img src="brand assets/Website Images/remi-coach.jpg" alt="Remington Rodney" class="w-full h-full object-cover" style="object-position: top center;">
             <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to right, #0D0D0D 0%, transparent 200px);"></div>
             <div class="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style="background: linear-gradient(to top, #0D0D0D, transparent);"></div>
         </div>
@@ -244,6 +262,10 @@
 
             <div class="flex flex-col lg:flex-row gap-16 lg:gap-32">
                 <div class="w-full lg:w-1/2">
+                    <div class="mb-8">
+                        <h3 class="font-heading text-2xl md:text-3xl text-primary mb-2">Remington Rodney</h3>
+                        <span class="font-mono tracking-widest text-[10px] text-accent uppercase">Founder, The Reset Protocol</span>
+                    </div>
                     <div class="space-y-6 text-muted text-base leading-loose font-body">
                         <p>
                             I came into Web3 with no technical background. No crypto experience. No whitepaper knowledge. Within 18 months I was one of the most recognized connectors and recruiters in the space.
@@ -418,10 +440,18 @@
             </p>
             <div class="flex flex-col items-center justify-center space-y-8">
                 <a href="https://calendar.app.google/8hKgf5JvKFuHb2Da7" target="_blank" rel="noopener noreferrer" class="btn-ghost !px-16 !py-5 !text-sm">APPLY FOR THE RESET</a>
+                <a href="case-study.html" class="font-mono tracking-widest text-[10px] text-accent/70 uppercase hover:text-accent transition-colors">Read the case study &rarr;</a>
                 <div class="text-center">
                     <p class="font-mono tracking-widest text-[10px] text-primary/70 uppercase mb-2">$1,500 | Limited spots | Private 1:1</p>
                     <p class="font-mono tracking-widest text-[10px] text-accent/50 uppercase">3-Month Program available for ongoing clients. $4,500.</p>
                 </div>
+            </div>
+
+            <div class="mt-20 max-w-xl mx-auto text-center">
+                <p class="font-heading text-lg text-primary/80 italic leading-relaxed mb-4">
+                    "The only regret you'll have is not working with him sooner."
+                </p>
+                <span class="font-mono tracking-widest text-[9px] text-accent/60 uppercase">SOPHIA // FOUNDER</span>
             </div>
         </div>
     </section>

@@ -6,6 +6,18 @@
     <title>Case Study | The Reset Protocol</title>
     <meta name="description" content="How a Web3 GTM Leader got his ground back. A Reset Protocol case study.">
     <link rel="icon" type="image/png" href="resetprotocol/assets/logo.png">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Case Study | The Reset Protocol">
+    <meta property="og:description" content="Mid-hack. Post-surgery. One month of runway. How a Web3 GTM Leader got his ground back in three sessions.">
+    <meta property="og:image" content="https://theresetprotocol.xyz/resetprotocol/assets/logo.png">
+    <meta property="og:url" content="https://theresetprotocol.xyz/case-study.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="The Reset Protocol">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Case Study | The Reset Protocol">
+    <meta name="twitter:description" content="Mid-hack. Post-surgery. One month of runway. How a Web3 GTM Leader got his ground back in three sessions.">
+    <meta name="twitter:image" content="https://theresetprotocol.xyz/resetprotocol/assets/logo.png">
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -124,9 +136,9 @@
                 <img src="resetprotocol/assets/logo.png" alt="The Reset Protocol" style="height: 28px; width: auto;">
                 <span class="font-heading text-sm font-semibold tracking-widest text-primary uppercase hidden sm:inline">THE RESET PROTOCOL</span>
             </a>
-            <div class="flex items-center gap-3">
-                <a href="case-study.html" class="btn-ghost btn-ghost-subtle !py-3 !px-6 !text-[0.65rem]">CASE STUDY</a>
-                <a href="index.html#apply" class="btn-ghost !py-3 !px-8 !text-[0.65rem]">APPLY</a>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="case-study.html" class="btn-ghost btn-ghost-subtle !py-2 !px-4 sm:!py-3 sm:!px-6 !text-[0.55rem] sm:!text-[0.65rem]">CASE STUDY</a>
+                <a href="index.html#apply" class="btn-ghost !py-2 !px-5 sm:!py-3 sm:!px-8 !text-[0.55rem] sm:!text-[0.65rem]">APPLY</a>
             </div>
         </div>
     </nav>
@@ -380,6 +392,11 @@
         </div>
     </footer>
 
+    <!-- Back to top -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 z-50 w-12 h-12 bg-card border border-border-warm text-accent flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:border-accent" style="border-radius: 0;" aria-label="Back to top">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 14V2M3 6l5-4 5 4"/></svg>
+    </button>
+
     <!-- JS -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -399,6 +416,20 @@
 
             reveals.forEach(reveal => {
                 revealOnScroll.observe(reveal);
+            });
+
+            const backToTop = document.getElementById('back-to-top');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 600) {
+                    backToTop.style.opacity = '1';
+                    backToTop.style.pointerEvents = 'auto';
+                } else {
+                    backToTop.style.opacity = '0';
+                    backToTop.style.pointerEvents = 'none';
+                }
+            });
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
     </script>
