@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Reset Protocol</title>
+    <meta name="description" content="For Web3 founders who are busy but lost. The Reset Protocol helps you hear it.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --obsidian: #0D0D0D;
+            --carbon: #1A1A1A;
+            --teal: #277570;
+            --teal-40: rgba(39, 117, 112, 0.4);
+            --teal-12: rgba(39, 117, 112, 0.12);
+            --white: #FFFFFF;
+            --smoke: #808080;
+            --smoke-50: rgba(128, 128, 128, 0.5);
+            --border: rgba(255, 255, 255, 0.04);
+            --font: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: auto; /* we handle snap per-section */
+        }
+
+        body {
+            background: var(--obsidian);
+            color: var(--white);
+            font-family: var(--font);
+            font-weight: 400;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        ::selection { background: var(--teal); color: var(--white); }
+        a { color: inherit; text-decoration: none; }
+        img { display: block; max-width: 100%; }
+
+        /* =============================================
+           NAV
+        ============================================= */
+        #nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 200;
+            padding: 1.5rem 0;
+            transition: background 0.8s ease, backdrop-filter 0.8s ease;
+        }
+        #nav.scrolled {
+            background: rgba(13, 13, 13, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (min-width: 768px) { .nav-inner { padding: 0 3rem; } }
+        .nav-logo {
+            height: 24px;
+            width: auto;
+            filter: invert(1);
+            opacity: 0.9;
+        }
+        .nav-btn {
+            font-family: var(--font);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--white);
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 0.6rem 1.4rem;
+            cursor: pointer;
+            transition: all 0.6s ease;
+            border-radius: 0;
+        }
+        .nav-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        /* =============================================
+           HERO — THE EMPTINESS IS THE DESIGN
+        ============================================= */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-logo {
+            width: 100px;
+            height: auto;
+            filter: invert(1);
+            opacity: 0;
+            transform: scale(0.9);
+            animation: heroLogoIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+        }
+        @media (min-width: 768px) { .hero-logo { width: 120px; } }
+
+        @keyframes heroLogoIn {
+            to { opacity: 0.95; transform: scale(1); }
+        }
+
+        .hero-name {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--white);
+            margin-top: 3rem;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.8s forwards;
+        }
+
+        .hero-breath {
+            width: 40px;
+            height: 1px;
+            background: var(--teal);
+            margin: 1.5rem auto;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.2s forwards, breathe 4s ease-in-out 2.2s infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { width: 40px; opacity: 0.5; }
+            50% { width: 80px; opacity: 1; }
+        }
+
+        .hero-tagline {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--smoke);
+            letter-spacing: 0.02em;
+            max-width: 340px;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.4s forwards;
+        }
+
+        .hero-subline {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--smoke-50);
+            letter-spacing: 0.06em;
+            margin-top: 0.75rem;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.6s forwards;
+        }
+
+        .hero-cta {
+            margin-top: 3rem;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.8s forwards;
+        }
+
+        .hero-cta a {
+            font-family: var(--font);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--smoke);
+            border-bottom: 1px solid var(--teal-40);
+            padding-bottom: 4px;
+            transition: color 0.6s ease, border-color 0.6s ease;
+        }
+        .hero-cta a:hover {
+            color: var(--teal);
+            border-color: var(--teal);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.5; }
+        }
+
+        /* =============================================
+           REALITY — SCROLL SNAP STATEMENTS
+        ============================================= */
+        #reality {
+            height: 100vh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .reality-slide {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .reality-slide .statement {
+            font-weight: 700;
+            font-size: clamp(26px, 5vw, 52px);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            max-width: 800px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .reality-slide .statement .teal { color: var(--teal); }
+
+        .reality-slide:nth-child(2) {
+            background: var(--carbon);
+        }
+
+        /* =============================================
+           PROTOCOL — HORIZONTAL SCROLL PHASES
+        ============================================= */
+        #protocol-wrap {
+            position: relative;
+            background: var(--obsidian);
+        }
+
+        .protocol-header {
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .protocol-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1.5rem;
+        }
+
+        .protocol-title {
+            font-size: clamp(32px, 4.5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+            line-height: 1.1;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .protocol-sub {
+            font-size: 14px;
+            color: var(--smoke);
+        }
+
+        .h-scroll-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            scrollbar-width: none;
+        }
+        .h-scroll-container::-webkit-scrollbar { display: none; }
+
+        .phase-panel {
+            min-width: 85vw;
+            max-width: 85vw;
+            height: 70vh;
+            min-height: 500px;
+            scroll-snap-align: center;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4rem 3rem;
+            border-right: 1px solid var(--teal-12);
+            position: relative;
+        }
+        .phase-panel:first-child { margin-left: 7.5vw; }
+        .phase-panel:last-child { margin-right: 7.5vw; border-right: none; }
+
+        @media (min-width: 768px) {
+            .phase-panel {
+                min-width: 40vw;
+                max-width: 40vw;
+                padding: 4rem;
+            }
+            .phase-panel:first-child { margin-left: 10vw; }
+            .phase-panel:last-child { margin-right: 10vw; }
+        }
+
+        @media (min-width: 1200px) {
+            .phase-panel {
+                min-width: 33.333vw;
+                max-width: 33.333vw;
+            }
+            .phase-panel:first-child { margin-left: calc((100vw - 1400px) / 2 + 3rem); }
+            .phase-panel:last-child { margin-right: calc((100vw - 1400px) / 2 + 3rem); }
+        }
+
+        .phase-num {
+            font-size: clamp(80px, 12vw, 140px);
+            font-weight: 700;
+            line-height: 1;
+            color: var(--teal-12);
+            letter-spacing: -0.04em;
+        }
+
+        .phase-content { margin-top: auto; }
+
+        .phase-name {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+
+        .phase-title {
+            font-size: clamp(24px, 3vw, 32px);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            line-height: 1.1;
+            margin-bottom: 1.25rem;
+            color: var(--white);
+        }
+
+        .phase-body {
+            font-size: 14px;
+            line-height: 1.75;
+            color: var(--smoke);
+            max-width: 400px;
+        }
+
+        .phase-outcome {
+            margin-top: 2rem;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--teal-40);
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--teal-12);
+        }
+
+        .protocol-pricing {
+            text-align: center;
+            padding: 4rem 2rem 8rem;
+        }
+        .protocol-pricing p {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .protocol-pricing p:first-child { color: var(--smoke-50); }
+        .protocol-pricing p:last-child { color: var(--teal-40); margin-top: 0.5rem; }
+
+        /* =============================================
+           COACH — STICKY IMAGE
+        ============================================= */
+        #coach {
+            background: var(--carbon);
+            position: relative;
+        }
+
+        .coach-layout {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 1024px) {
+            .coach-layout {
+                flex-direction: row;
+                min-height: 100vh;
+            }
+        }
+
+        .coach-image-col {
+            width: 100%;
+            height: 50vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 1024px) {
+            .coach-image-col {
+                width: 42%;
+                height: auto;
+                position: sticky;
+                top: 0;
+                align-self: flex-start;
+                height: 100vh;
+            }
+        }
+
+        .coach-image-col img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        /* Right-side fade on desktop */
+        .coach-image-col::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 120px;
+            background: linear-gradient(to left, var(--carbon), transparent);
+            display: none;
+        }
+        @media (min-width: 1024px) {
+            .coach-image-col::after { display: block; }
+        }
+
+        .coach-text-col {
+            width: 100%;
+            padding: 4rem 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .coach-text-col { padding: 4rem 3rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .coach-text-col {
+                width: 58%;
+                padding: 8rem 4rem 8rem 5rem;
+            }
+        }
+
+        .coach-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 3rem;
+        }
+
+        .coach-text-col .body-p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--smoke);
+            margin-bottom: 1.5rem;
+        }
+
+        .credentials {
+            margin-top: 3rem;
+        }
+
+        .cred-row {
+            padding: 1.25rem 0;
+            border-top: 1px solid var(--teal-12);
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .cred-row:last-child { border-bottom: 1px solid var(--teal-12); }
+
+        .cred-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--teal-40);
+        }
+        .cred-value {
+            font-size: 14px;
+            color: var(--white);
+        }
+
+        /* =============================================
+           TESTIMONIALS — FULL SCREEN SCROLL-SNAP
+        ============================================= */
+        #testimonials {
+            height: 100vh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .test-slide {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .test-slide:nth-child(even) { background: var(--carbon); }
+
+        .test-quote {
+            font-size: clamp(22px, 3.5vw, 40px);
+            font-weight: 700;
+            line-height: 1.3;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            max-width: 700px;
+            color: var(--white);
+        }
+
+        .test-attr {
+            margin-top: 2.5rem;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--teal);
+        }
+
+        .test-indicator {
+            position: absolute;
+            bottom: 3rem;
+            display: flex;
+            gap: 8px;
+        }
+        .test-dot {
+            width: 6px;
+            height: 6px;
+            border: 1px solid var(--teal-40);
+            background: transparent;
+            transition: background 0.6s ease;
+        }
+        .test-dot.active {
+            background: var(--teal);
+        }
+
+        /* =============================================
+           CTA — MIRROR THE HERO
+        ============================================= */
+        #cta {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .cta-headline {
+            font-size: clamp(32px, 6vw, 64px);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            color: var(--white);
+            max-width: 700px;
+        }
+
+        .cta-sub {
+            font-size: clamp(18px, 2.5vw, 28px);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--teal);
+            margin-top: 0.75rem;
+            text-transform: none;
+        }
+
+        .cta-body {
+            font-size: 14px;
+            color: var(--smoke);
+            line-height: 1.75;
+            max-width: 480px;
+            margin-top: 2rem;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 3rem;
+            font-family: var(--font);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--obsidian);
+            background: var(--white);
+            border: 1px solid var(--white);
+            padding: 1.1rem 2.5rem;
+            cursor: pointer;
+            transition: all 0.6s ease;
+            border-radius: 0;
+        }
+        .cta-btn:hover {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: var(--white);
+        }
+
+        .cta-pricing {
+            margin-top: 2rem;
+        }
+        .cta-pricing p {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .cta-pricing p:first-child { color: var(--smoke-50); }
+        .cta-pricing p:last-child { color: var(--teal-40); margin-top: 0.35rem; }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+        footer {
+            border-top: 1px solid var(--teal-12);
+            padding: 2.5rem 0;
+        }
+        .footer-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            text-align: center;
+        }
+        @media (min-width: 640px) {
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 0 3rem;
+            }
+        }
+        .footer-inner span {
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--smoke-50);
+        }
+        .footer-inner span a {
+            color: var(--teal-40);
+            transition: color 0.4s;
+        }
+        .footer-inner span a:hover { color: var(--teal); }
+
+        /* =============================================
+           SECTION DIVIDERS
+        ============================================= */
+        .teal-line {
+            width: 100%;
+            height: 1px;
+            background: var(--teal-12);
+        }
+
+        /* =============================================
+           REVEAL
+        ============================================= */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .rd1 { transition-delay: 0.15s; }
+        .rd2 { transition-delay: 0.3s; }
+        .rd3 { transition-delay: 0.45s; }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <div class="nav-inner">
+            <img src="assets/logo.png" alt="The Reset Protocol" class="nav-logo">
+            <a href="#cta" class="nav-btn">Apply</a>
+        </div>
+    </nav>
+
+    <!-- =============================================
+         HERO — EMPTINESS IS THE DESIGN
+    ============================================= -->
+    <section id="hero">
+        <img src="assets/logo.png" alt="" class="hero-logo" aria-hidden="true">
+        <p class="hero-name">The Reset Protocol</p>
+        <div class="hero-breath"></div>
+        <p class="hero-tagline">The Reset Protocol helps you hear it.</p>
+        <p class="hero-subline">For Web3 founders who are busy but lost.</p>
+        <div class="hero-cta">
+            <a href="#reality">Begin</a>
+        </div>
+    </section>
+
+    <div class="teal-line"></div>
+
+    <!-- =============================================
+         REALITY — ONE STATEMENT PER SCREEN
+    ============================================= -->
+    <section id="reality">
+        <div class="reality-slide">
+            <p class="statement">The market does not care that it is 3am. <span class="teal">They care about revenue.</span></p>
+        </div>
+        <div class="reality-slide">
+            <p class="statement">So you keep going. <span class="teal">Because that is what got you here.</span></p>
+        </div>
+        <div class="reality-slide">
+            <p class="statement">Your nervous system has been in threat mode so long <span class="teal">it does not remember what calm feels like.</span></p>
+        </div>
+    </section>
+
+    <div class="teal-line"></div>
+
+    <!-- =============================================
+         PROTOCOL — HORIZONTAL SCROLL
+    ============================================= -->
+    <div id="protocol-wrap">
+        <div class="protocol-header reveal">
+            <p class="protocol-label">The Protocol</p>
+            <h2 class="protocol-title">Three Weeks.<br>Three Phases.</h2>
+            <p class="protocol-sub">One system built around you.</p>
+        </div>
+
+        <div class="h-scroll-container">
+            <div class="phase-panel">
+                <div class="phase-num">01</div>
+                <div class="phase-content">
+                    <p class="phase-name">Phase 01</p>
+                    <h3 class="phase-title">Regulate</h3>
+                    <p class="phase-body">Exit survival mode. Performance built on adrenaline collapses and in this industry, adrenaline is the default fuel.</p>
+                    <p class="phase-outcome">Outcome: Nervous System Restored</p>
+                </div>
+            </div>
+            <div class="phase-panel">
+                <div class="phase-num">02</div>
+                <div class="phase-content">
+                    <p class="phase-name">Phase 02</p>
+                    <h3 class="phase-title">Clarity</h3>
+                    <p class="phase-body">A full audit of where you actually are. Career, finances, health, relationships, environment.</p>
+                    <p class="phase-outcome">Outcome: Blind Spots Identified</p>
+                </div>
+            </div>
+            <div class="phase-panel">
+                <div class="phase-num">03</div>
+                <div class="phase-content">
+                    <p class="phase-name">Phase 03</p>
+                    <h3 class="phase-title">Execute</h3>
+                    <p class="phase-body">We install your non-negotiables and align your highest-leverage actions with your energy.</p>
+                    <p class="phase-outcome">Outcome: Sustainable Execution Installed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="protocol-pricing">
+            <p>$1,500 &nbsp;|&nbsp; Private 1:1 &nbsp;|&nbsp; 3 Weeks</p>
+            <p>3-Month Program available. $4,500.</p>
+        </div>
+    </div>
+
+    <div class="teal-line"></div>
+
+    <!-- =============================================
+         COACH — STICKY IMAGE
+    ============================================= -->
+    <section id="coach">
+        <div class="coach-layout">
+            <div class="coach-image-col">
+                <img src="assets/remi-coach.jpg" alt="Remington L. Rodney">
+            </div>
+            <div class="coach-text-col">
+                <p class="coach-label reveal">The Coach</p>
+                <p class="body-p reveal">I came into Web3 with no technical background. No crypto experience. No whitepaper knowledge. Within 18 months I was one of the most recognized connectors and recruiters in the space.</p>
+                <p class="body-p reveal rd1">I did the full conference circuit. Spoke at ETH Denver and ETH CC. Built real relationships with teams at Dragonfly, Optimism, OpenSea, Electric Capital, Blockworks and more.</p>
+                <p class="body-p reveal rd2">I also know what that pace costs. I have hit the wall that every high-performer eventually hits when they never stop long enough to recover.</p>
+                <p class="body-p reveal rd3">Burnout is not a motivation problem. It is a nervous system problem. I learned that the hard way. And now it is the only thing I work on.</p>
+
+                <div class="credentials reveal">
+                    <div class="cred-row">
+                        <span class="cred-label">Domain</span>
+                        <span class="cred-value">Web3 Recruitment and Ecosystem Building</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-label">Background</span>
+                        <span class="cred-value">18 Years Competitive Athletics. $10M+ Revenue Generated</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-label">Conferences</span>
+                        <span class="cred-value">ETH Denver. ETH CC. Speaker and Attendee</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-label">Performed For</span>
+                        <span class="cred-value">Coinbase. Polkadot. Galaxy. Near Foundation</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-label">Podcast</span>
+                        <span class="cred-value">2 Years. Guests from Dragonfly, Optimism, OpenSea, Blockworks, Electric Capital</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="teal-line"></div>
+
+    <!-- =============================================
+         TESTIMONIALS — FULL SCREEN SNAP
+    ============================================= -->
+    <section id="testimonials">
+        <div class="test-slide" data-index="0">
+            <p class="test-quote">"The only regret you will have is not working with him sooner."</p>
+            <p class="test-attr">Sophia, Founder</p>
+            <div class="test-indicator">
+                <div class="test-dot active"></div>
+                <div class="test-dot"></div>
+                <div class="test-dot"></div>
+            </div>
+        </div>
+        <div class="test-slide" data-index="1">
+            <p class="test-quote">"After spending time with Remi, I felt a renewed sense of passion and purpose in everything I was doing."</p>
+            <p class="test-attr">Max, Web3 Founder</p>
+            <div class="test-indicator">
+                <div class="test-dot"></div>
+                <div class="test-dot active"></div>
+                <div class="test-dot"></div>
+            </div>
+        </div>
+        <div class="test-slide" data-index="2">
+            <p class="test-quote">"It just gave me more of a calm mind looking at the obstacles I need to beat in my life right now."</p>
+            <p class="test-attr">Nilo, Founder</p>
+            <div class="test-indicator">
+                <div class="test-dot"></div>
+                <div class="test-dot"></div>
+                <div class="test-dot active"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="teal-line"></div>
+
+    <!-- =============================================
+         CTA — MIRRORS THE HERO
+    ============================================= -->
+    <section id="cta">
+        <div class="reveal">
+            <p class="cta-headline">You do not need another framework.</p>
+            <p class="cta-sub">You need a reset.</p>
+            <p class="cta-body">The 3-Week Performance Reset is a private 1:1 engagement for Web3 founders who are ready to lead from regulation, not reaction.</p>
+            <a href="https://calendar.app.google/8hKgf5JvKFuHb2Da7" target="_blank" rel="noopener noreferrer" class="cta-btn">Apply for the Reset</a>
+            <div class="cta-pricing">
+                <p>$1,500 &nbsp;|&nbsp; Limited Spots &nbsp;|&nbsp; Private 1:1</p>
+                <p>3-Month Program available. $4,500.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <span>The Reset Protocol &copy; 2026</span>
+            <span><a href="https://theresetprotocol.xyz">theresetprotocol.xyz</a></span>
+            <span>Bali, Indonesia</span>
+        </div>
+    </footer>
+
+    <!-- =============================================
+         JS
+    ============================================= -->
+    <script>
+        // Nav scroll
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 80);
+        }, { passive: true });
+
+        // Reveal on scroll
+        const revealEls = document.querySelectorAll('.reveal');
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    revealObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        revealEls.forEach(el => revealObs.observe(el));
+
+        // Testimonial dot indicators — sync on scroll
+        const testSection = document.getElementById('testimonials');
+        if (testSection) {
+            const slides = testSection.querySelectorAll('.test-slide');
+            const allDots = testSection.querySelectorAll('.test-indicator');
+
+            const dotObs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+                        const idx = parseInt(entry.target.dataset.index);
+                        allDots.forEach(indicator => {
+                            const dots = indicator.querySelectorAll('.test-dot');
+                            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                        });
+                    }
+                });
+            }, { root: testSection, threshold: 0.6 });
+
+            slides.forEach(s => dotObs.observe(s));
+        }
+    </script>
+
+</body>
+</html>

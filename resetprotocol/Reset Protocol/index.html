@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Reset Protocol — Web3 Doesn't Have an Off Switch</title>
+    <meta name="description" content="For Web3 founders who are busy but lost. The Reset Protocol helps you get quiet enough to hear what you want — and clear enough to go after it.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==============================================
+           DESIGN TOKENS
+        ============================================== */
+        :root {
+            --obsidian:      #0D0D0D;
+            --carbon:        #111111;
+            --rule:          #1C1C1C;
+            --white:         #FFFFFF;
+            --smoke:         #888888;
+            --ash:           #333333;
+            --teal:          #277570;
+            --teal-deep:     #1A4F4C;
+            --teal-mid:      rgba(39, 117, 112, 0.4);
+            --teal-glow:     rgba(39, 117, 112, 0.06);
+
+            --font:            'Inter', 'Helvetica Neue', Arial, sans-serif;
+            --tracking-wide:   0.08em;
+            --tracking-widest: 0.2em;
+
+            --ease-slow:    cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-mid:     cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-gentle:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --dur-reveal:   1.2s;
+            --dur-hover:    0.4s;
+            --dur-micro:    0.2s;
+
+            --text-hero:   clamp(36px, 5.5vw, 72px);
+            --text-h1:     clamp(32px, 5vw, 64px);
+            --text-h2:     clamp(22px, 3vw, 40px);
+            --text-body:   clamp(15px, 1.6vw, 18px);
+            --text-small:  13px;
+            --text-micro:  11px;
+            --leading-tight: 1.08;
+            --leading-body:  1.75;
+        }
+
+        /* ==============================================
+           RESET & BASE
+        ============================================== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            background: var(--obsidian);
+            color: var(--white);
+            font-family: var(--font);
+            font-weight: 400;
+            line-height: var(--leading-body);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        ::selection { background: var(--teal); color: var(--white); }
+        a { color: inherit; text-decoration: none; }
+        img { display: block; max-width: 100%; }
+        button { border: none; background: none; cursor: pointer; font-family: var(--font); }
+        ul { list-style: none; }
+
+        /* ==============================================
+           CUSTOM CURSOR
+        ============================================== */
+        @media (pointer: fine) {
+            body, a, button, li { cursor: none !important; }
+        }
+        .cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 10px; height: 10px;
+            background: var(--teal);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            mix-blend-mode: difference;
+        }
+        .cursor.visible { opacity: 1; }
+
+        /* ==============================================
+           GRAIN OVERLAY (global)
+        ============================================== */
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            pointer-events: none;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ==============================================
+           SCROLL REVEAL SYSTEM
+        ============================================== */
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity var(--dur-reveal) var(--ease-slow),
+                        transform var(--dur-reveal) var(--ease-slow);
+        }
+        [data-reveal].visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        [data-delay="1"] { transition-delay: 150ms; }
+        [data-delay="2"] { transition-delay: 300ms; }
+        [data-delay="3"] { transition-delay: 450ms; }
+        [data-delay="4"] { transition-delay: 600ms; }
+        [data-delay="5"] { transition-delay: 750ms; }
+        [data-delay="6"] { transition-delay: 900ms; }
+
+        /* ==============================================
+           ACCENT LINE DRAW
+        ============================================== */
+        .accent-line {
+            width: 0;
+            height: 1px;
+            background: var(--teal);
+            transition: width 1.4s var(--ease-slow);
+        }
+        .accent-line.visible { width: 60px; }
+
+        /* ==============================================
+           HOME SCREEN — LAYER 1
+        ============================================== */
+        #home {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            transition: opacity 0.6s var(--ease-mid);
+        }
+        #home.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Background panels */
+        .home-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+        .bg-panel {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.8s var(--ease-slow);
+            background-size: cover;
+            background-position: center;
+        }
+        .bg-panel.active { opacity: 1; }
+
+        .bg-panel[data-for="reality"]  { background-color: var(--obsidian); }
+        .bg-panel[data-for="protocol"] { background-color: #080f0e; }
+        .bg-panel[data-for="founder"]  {
+            background-image: url('assets/images/remi-coach.jpg');
+            background-color: var(--obsidian);
+        }
+        .bg-panel[data-for="results"]  { background-color: #060d0d; }
+        .bg-panel[data-for="apply"]    { background-color: var(--obsidian); }
+        .bg-panel.bg-default           { background-color: var(--obsidian); }
+
+        /* Teal glow on hover panels */
+        .bg-panel[data-for]::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--teal-glow);
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        .bg-panel[data-for].active::after { opacity: 1; }
+
+        /* Left vignette so text stays readable */
+        .home-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to right,
+                rgba(13, 13, 13, 0.95) 0%,
+                rgba(13, 13, 13, 0.7) 35%,
+                rgba(13, 13, 13, 0.15) 100%
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Top bar */
+        .home-topbar {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 10;
+            padding: clamp(24px, 3vw, 40px) clamp(32px, 5vw, 60px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .nav-logo svg {
+            height: 26px;
+            width: auto;
+        }
+        .nav-logo-text {
+            font-size: var(--text-micro);
+            font-weight: 700;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--white);
+            opacity: 0.85;
+        }
+        @media (max-width: 480px) { .nav-logo-text { display: none; } }
+
+        .nav-cta {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--teal);
+            border: 1px solid var(--teal);
+            padding: 0.55rem 1.5rem;
+            transition: background var(--dur-hover) var(--ease-mid),
+                        color var(--dur-hover) var(--ease-mid);
+        }
+        .nav-cta:hover {
+            background: var(--teal);
+            color: var(--white);
+        }
+
+        /* Brand statement — upper left, absolutely positioned */
+        .home-statement {
+            position: absolute;
+            z-index: 10;
+            top: clamp(120px, 16vh, 200px);
+            left: clamp(32px, 5vw, 60px);
+            right: clamp(32px, 5vw, 60px);
+            max-width: 700px;
+        }
+
+        .home-label {
+            font-size: var(--text-micro);
+            font-weight: 500;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--smoke);
+            margin-bottom: 1.25rem;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease-slow) 0.3s forwards;
+        }
+
+        .home-statement h1 {
+            font-size: clamp(36px, 5.5vw, 72px);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+            text-transform: none;
+        }
+        .home-statement h1 .word {
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .home-statement h1 .word + .word,
+        .home-statement h1 .word + .accent,
+        .home-statement h1 .accent { margin-left: 0.28em; }
+        .home-statement h1 .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(16px);
+        }
+        .home-statement h1 .char.revealed {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s var(--ease-slow), transform 0.5s var(--ease-slow);
+        }
+        .home-statement h1 .accent { color: var(--teal); }
+
+        .home-sub {
+            font-size: var(--text-body);
+            color: var(--smoke);
+            margin-top: 1.25rem;
+            max-width: 400px;
+            line-height: var(--leading-body);
+            opacity: 0;
+            animation: fadeUp 1s var(--ease-slow) 3s forwards;
+        }
+
+        /* Left nav pills — fixed, bottom-left, vertical stack */
+        .home-nav {
+            position: absolute;
+            z-index: 10;
+            left: clamp(24px, 4vw, 48px);
+            bottom: clamp(32px, 5vh, 80px);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .home-nav li {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--smoke);
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: 0;
+            cursor: pointer;
+            transition: all var(--dur-hover) var(--ease-mid);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            user-select: none;
+            width: fit-content;
+        }
+        .home-nav li:hover,
+        .home-nav li.active {
+            background: rgba(39, 117, 112, 0.12);
+            border-color: rgba(39, 117, 112, 0.3);
+            color: var(--white);
+        }
+
+        /* Last pill fades out like Metalab */
+        .home-nav li:last-child {
+            opacity: 0.35;
+        }
+        .home-nav li:last-child:hover {
+            opacity: 1;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==============================================
+           SECTION PAGES — LAYER 2
+        ============================================== */
+        .section-page {
+            position: fixed;
+            inset: 0;
+            background: var(--obsidian);
+            z-index: 100;
+            overflow-y: auto;
+            overflow-x: hidden;
+            opacity: 0;
+            transform: translateY(40px);
+            pointer-events: none;
+            transition: opacity 0.8s var(--ease-slow), transform 0.8s var(--ease-slow);
+        }
+        .section-page.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .section-inner {
+            min-height: 100vh;
+            padding: clamp(100px, 12vw, 140px) clamp(32px, 6vw, 120px) clamp(64px, 8vw, 120px);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: clamp(24px, 3vw, 40px);
+            left: clamp(32px, 5vw, 60px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: var(--tracking-widest);
+            color: var(--smoke);
+            text-transform: uppercase;
+            transition: color var(--dur-hover) ease;
+            padding: 8px 0;
+        }
+        .back-btn:hover { color: var(--teal); }
+        .back-btn .arrow {
+            font-size: 18px;
+            line-height: 1;
+            transition: transform var(--dur-hover) ease;
+        }
+        .back-btn:hover .arrow { transform: translateX(-4px); }
+
+        /* Section nav CTA (top right inside sections) */
+        .section-nav-cta {
+            position: fixed;
+            top: clamp(24px, 3vw, 40px);
+            right: clamp(32px, 5vw, 60px);
+            z-index: 200;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--teal);
+            border: 1px solid var(--teal);
+            padding: 0.55rem 1.5rem;
+            transition: background var(--dur-hover) var(--ease-mid),
+                        color var(--dur-hover) var(--ease-mid);
+        }
+        .section-nav-cta:hover {
+            background: var(--teal);
+            color: var(--white);
+        }
+
+        /* ==============================================
+           SECTION: REALITY
+        ============================================== */
+        .reality-content { max-width: 720px; }
+        .reality-line {
+            font-size: clamp(20px, 2.8vw, 30px);
+            font-weight: 700;
+            line-height: 1.35;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--white);
+        }
+        .reality-line + .reality-line { margin-top: 0.4rem; }
+        .reality-pause { height: clamp(48px, 6vw, 80px); }
+        .reality-turn {
+            font-size: clamp(17px, 2vw, 22px);
+            font-weight: 400;
+            line-height: 1.65;
+            color: var(--smoke);
+            max-width: 560px;
+        }
+        .reality-whisper {
+            font-size: var(--text-body);
+            font-weight: 400;
+            line-height: var(--leading-body);
+            color: var(--ash);
+            max-width: 480px;
+            margin-top: 2.5rem;
+        }
+
+        /* ==============================================
+           SECTION: PROTOCOL
+        ============================================== */
+        .protocol-intro { margin-bottom: clamp(48px, 6vw, 80px); }
+        .section-label {
+            font-size: var(--text-micro);
+            font-weight: 500;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1.25rem;
+        }
+        .protocol-title {
+            font-size: var(--text-h1);
+            font-weight: 700;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            line-height: var(--leading-tight);
+        }
+        .protocol-sub {
+            font-size: var(--text-body);
+            color: var(--smoke);
+            margin-top: 0.75rem;
+        }
+
+        .phase-row {
+            padding: clamp(28px, 3.5vw, 48px) 0;
+            border-top: 1px solid var(--rule);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        .phase-row:last-of-type { border-bottom: 1px solid var(--rule); }
+
+        @media (min-width: 768px) {
+            .phase-row {
+                grid-template-columns: 72px 180px 1fr auto;
+                align-items: start;
+                gap: 2rem;
+            }
+        }
+
+        .phase-num {
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700;
+            line-height: 1;
+            color: var(--teal);
+            letter-spacing: -0.02em;
+        }
+        .phase-name {
+            font-size: var(--text-h2);
+            font-weight: 700;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            line-height: var(--leading-tight);
+        }
+        .phase-body {
+            font-size: var(--text-body);
+            line-height: var(--leading-body);
+            color: var(--smoke);
+            max-width: 440px;
+        }
+        .phase-outcome {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--teal);
+            white-space: nowrap;
+        }
+        @media (max-width: 767px) {
+            .phase-outcome { margin-top: 0.25rem; }
+        }
+
+        .protocol-pricing {
+            margin-top: clamp(48px, 6vw, 72px);
+            text-align: center;
+        }
+        .protocol-pricing p {
+            font-size: var(--text-micro);
+            font-weight: 700;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+        }
+        .price-main { color: var(--smoke); }
+        .price-alt  { color: var(--teal-mid); margin-top: 0.35rem; }
+
+        /* ==============================================
+           SECTION: FOUNDER
+        ============================================== */
+        .founder-layout {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(32px, 4vw, 64px);
+        }
+        @media (min-width: 1024px) {
+            .founder-layout { flex-direction: row; gap: 80px; }
+        }
+
+        .founder-image {
+            width: 100%;
+            max-height: 50vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .founder-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            animation: kenBurns 12s var(--ease-gentle) forwards;
+        }
+        @keyframes kenBurns {
+            from { transform: scale(1); }
+            to   { transform: scale(1.04); }
+        }
+        @media (min-width: 1024px) {
+            .founder-image {
+                width: 40%;
+                max-height: none;
+                flex-shrink: 0;
+            }
+            .founder-image img { min-height: 600px; }
+        }
+
+        .founder-text { flex: 1; }
+
+        .founder-name {
+            font-size: var(--text-h2);
+            font-weight: 700;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            line-height: var(--leading-tight);
+            margin-bottom: 2.5rem;
+        }
+        .founder-text .body-p {
+            font-size: var(--text-body);
+            line-height: var(--leading-body);
+            color: var(--smoke);
+            margin-bottom: 1.25rem;
+        }
+
+        .credentials { margin-top: 2.5rem; }
+        .cred-row {
+            padding: 1.1rem 0;
+            border-top: 1px solid var(--rule);
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .cred-row:last-child { border-bottom: 1px solid var(--rule); }
+        .cred-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--teal-mid);
+        }
+        .cred-value {
+            font-size: 14px;
+            color: var(--white);
+        }
+
+        /* ==============================================
+           SECTION: RESULTS
+        ============================================== */
+        .results-featured {
+            text-align: center;
+            margin-bottom: clamp(48px, 6vw, 80px);
+        }
+        .results-mark {
+            font-size: 72px;
+            line-height: 1;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+        .results-quote {
+            font-size: clamp(22px, 3.5vw, 40px);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+        .results-attr {
+            font-size: var(--text-micro);
+            font-weight: 700;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-top: 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1px;
+        }
+        @media (min-width: 768px) {
+            .results-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        .result-card {
+            background: var(--carbon);
+            border: 1px solid var(--rule);
+            padding: clamp(28px, 3.5vw, 44px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 260px;
+        }
+        .result-card-mark {
+            font-size: 48px;
+            line-height: 1;
+            color: var(--teal);
+            margin-bottom: 1.25rem;
+        }
+        .result-card-quote {
+            font-size: var(--text-body);
+            line-height: var(--leading-body);
+            color: var(--smoke);
+            flex-grow: 1;
+        }
+        .result-card-attr {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        /* ==============================================
+           SECTION: APPLY
+        ============================================== */
+        .apply-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+        }
+        .apply-headline {
+            font-size: var(--text-h1);
+            font-weight: 700;
+            line-height: var(--leading-tight);
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+        }
+        .apply-sub {
+            font-size: clamp(20px, 3vw, 32px);
+            font-weight: 400;
+            color: var(--teal);
+            margin-top: 0.6rem;
+        }
+        .apply-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2.5rem;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: var(--tracking-widest);
+            text-transform: uppercase;
+            color: var(--obsidian);
+            background: var(--white);
+            padding: 1rem 2.6rem;
+            transition: background var(--dur-hover) var(--ease-mid),
+                        color var(--dur-hover) var(--ease-mid);
+        }
+        .apply-btn:hover {
+            background: var(--teal);
+            color: var(--white);
+        }
+        .apply-pricing { margin-top: 2rem; }
+        .apply-pricing p {
+            font-size: var(--text-micro);
+            font-weight: 700;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+        }
+
+        /* ==============================================
+           FOOTER (inside sections)
+        ============================================== */
+        .section-footer {
+            border-top: 1px solid var(--teal);
+            padding: 2rem 0 0;
+            margin-top: clamp(64px, 8vw, 120px);
+        }
+        .section-footer-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            text-align: center;
+        }
+        @media (min-width: 640px) {
+            .section-footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+        .section-footer-inner span {
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+            color: var(--ash);
+        }
+        .section-footer-inner a {
+            color: var(--teal-mid);
+            transition: color var(--dur-hover) var(--ease-mid);
+        }
+        .section-footer-inner a:hover { color: var(--teal); }
+
+        /* ==============================================
+           MOBILE — 375px PASS
+        ============================================== */
+        @media (max-width: 768px) {
+            .home-statement {
+                top: clamp(90px, 14vh, 140px);
+                left: 24px;
+                right: 24px;
+            }
+            .home-statement h1 { font-size: clamp(28px, 7vw, 44px); }
+
+            .home-nav {
+                left: 24px;
+                bottom: 24px;
+                gap: 6px;
+            }
+            .home-nav li {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .home-topbar {
+                padding: 20px 24px;
+            }
+
+            .section-inner {
+                padding: clamp(80px, 10vw, 100px) 24px clamp(40px, 6vw, 64px);
+            }
+            .back-btn {
+                top: 20px;
+                left: 24px;
+            }
+            .section-nav-cta {
+                top: 20px;
+                right: 24px;
+                padding: 0.45rem 1rem;
+                font-size: 9px;
+            }
+
+            .founder-layout { flex-direction: column; }
+            .founder-image { width: 100%; max-height: 40vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- GRAIN -->
+    <div class="grain"></div>
+
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- =============================================
+         LAYER 1 — HOME SCREEN
+    ============================================= -->
+    <div id="home">
+
+        <!-- Background panels -->
+        <div class="home-bg">
+            <div class="bg-panel" data-for="reality"></div>
+            <div class="bg-panel" data-for="protocol"></div>
+            <div class="bg-panel" data-for="founder"></div>
+            <div class="bg-panel" data-for="results"></div>
+            <div class="bg-panel" data-for="apply"></div>
+            <div class="bg-panel bg-default active"></div>
+        </div>
+
+        <!-- Top bar -->
+        <nav class="home-topbar">
+            <a href="#" class="nav-logo">
+                <svg viewBox="0 0 120 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="The Reset Protocol logo">
+                    <circle cx="22" cy="22" r="18" fill="white"/>
+                    <rect x="36" y="4" width="56" height="36" rx="18" fill="white"/>
+                    <circle cx="34" cy="22" r="16" fill="#0D0D0D"/>
+                </svg>
+                <span class="nav-logo-text">The Reset Protocol</span>
+            </a>
+            <a href="#" class="nav-cta" data-nav-apply>Apply</a>
+        </nav>
+
+        <!-- Brand statement — upper left -->
+        <div class="home-statement">
+            <span class="home-label">// Performance Reset</span>
+            <h1 id="home-headline">
+                <span class="line">Web3 doesn't have</span><br>
+                <span class="line">an off switch.</span><br>
+                <span class="line">You need <span class="accent">one.</span></span>
+            </h1>
+            <p class="home-sub">This industry runs 24/7 and rewards you for keeping up. Nobody talks about the cost.</p>
+        </div>
+
+        <!-- Navigation pills — left side, vertical stack -->
+        <ul class="home-nav">
+            <li data-section="reality">The Reality</li>
+            <li data-section="protocol">The Protocol</li>
+            <li data-section="founder">The Founder</li>
+            <li data-section="results">Results</li>
+            <li data-section="apply">Work Together</li>
+        </ul>
+
+    </div>
+
+    <!-- =============================================
+         LAYER 2 — SECTION PAGES
+    ============================================= -->
+
+    <!-- SECTION: REALITY -->
+    <div class="section-page" id="section-reality">
+        <button class="back-btn"><span class="arrow">&larr;</span> Back</button>
+        <a href="#" class="section-nav-cta" data-nav-apply>Apply</a>
+        <div class="section-inner">
+            <div class="reality-content">
+                <p class="section-label" data-reveal>// The Reality</p>
+                <div class="accent-line" data-reveal data-delay="1" style="margin-bottom: 3rem;"></div>
+                <p class="reality-line" data-reveal data-delay="2">The market does not care that it is 3am.</p>
+                <p class="reality-line" data-reveal data-delay="3">Telegram does not care that you have not eaten.</p>
+                <p class="reality-line" data-reveal data-delay="4">Your investors do not care that you are running on empty.</p>
+                <div class="reality-pause"></div>
+                <p class="reality-turn" data-reveal data-delay="5">But somewhere between the momentum and the milestones, something got lost.</p>
+                <p class="reality-whisper" data-reveal data-delay="6">You are not stuck. You are not failing. You are just moving so fast you can't hear yourself anymore.</p>
+                <div class="accent-line" data-reveal data-delay="6" style="margin-top: 3rem;"></div>
+            </div>
+
+            <div class="section-footer">
+                <div class="section-footer-inner">
+                    <span>The Reset Protocol &copy; 2026</span>
+                    <span><a href="https://theresetprotocol.xyz">theresetprotocol.xyz</a></span>
+                    <span>Bali, Indonesia</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: PROTOCOL -->
+    <div class="section-page" id="section-protocol">
+        <button class="back-btn"><span class="arrow">&larr;</span> Back</button>
+        <a href="#" class="section-nav-cta" data-nav-apply>Apply</a>
+        <div class="section-inner">
+            <div class="protocol-intro" data-reveal>
+                <p class="section-label">// The Protocol</p>
+                <h2 class="protocol-title">Three Weeks.<br>Three Phases.</h2>
+                <p class="protocol-sub">One system. Built around you.</p>
+            </div>
+
+            <div class="phase-row" data-reveal data-delay="1">
+                <div class="phase-num">01</div>
+                <h3 class="phase-name">The Audit</h3>
+                <p class="phase-body">Exit survival mode. A full diagnostic of where you actually are — career, finances, health, relationships, environment. No assumptions.</p>
+                <span class="phase-outcome">Nervous System Restored</span>
+            </div>
+            <div class="phase-row" data-reveal data-delay="2">
+                <div class="phase-num">02</div>
+                <h3 class="phase-name">The Clarity</h3>
+                <p class="phase-body">Identify the blind spots. Separate the noise from the signal. Get clear on what you actually want — not what the market told you to want.</p>
+                <span class="phase-outcome">Blind Spots Identified</span>
+            </div>
+            <div class="phase-row" data-reveal data-delay="3">
+                <div class="phase-num">03</div>
+                <h3 class="phase-name">The Install</h3>
+                <p class="phase-body">We install your non-negotiables and align your highest-leverage actions with your energy. Sustainable execution, not another sprint.</p>
+                <span class="phase-outcome">Sustainable Execution Installed</span>
+            </div>
+
+            <div class="protocol-pricing" data-reveal data-delay="4">
+                <p class="price-main">$1,500 &nbsp;&middot;&nbsp; Private 1:1 &nbsp;&middot;&nbsp; 3 Weeks</p>
+                <p class="price-alt">3-Month Container: $4,500</p>
+            </div>
+
+            <div class="section-footer">
+                <div class="section-footer-inner">
+                    <span>The Reset Protocol &copy; 2026</span>
+                    <span><a href="https://theresetprotocol.xyz">theresetprotocol.xyz</a></span>
+                    <span>Bali, Indonesia</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: FOUNDER -->
+    <div class="section-page" id="section-founder">
+        <button class="back-btn"><span class="arrow">&larr;</span> Back</button>
+        <a href="#" class="section-nav-cta" data-nav-apply>Apply</a>
+        <div class="section-inner">
+            <p class="section-label" data-reveal>// The Founder</p>
+
+            <div class="founder-layout">
+                <div class="founder-image" data-reveal data-delay="1">
+                    <img src="assets/images/remi-coach.jpg" alt="Remington Langston Rodney — Founder of The Reset Protocol">
+                </div>
+                <div class="founder-text">
+                    <h2 class="founder-name" data-reveal data-delay="2">Remington Langston Rodney</h2>
+                    <p class="body-p" data-reveal data-delay="3">I came into Web3 with no technical background. No crypto experience. No whitepaper knowledge. Within 18 months I was one of the most recognized connectors and recruiters in the space.</p>
+                    <p class="body-p" data-reveal data-delay="4">I did the full conference circuit. Spoke at ETH Denver and ETH CC. Built real relationships with teams at Dragonfly, Optimism, OpenSea, Electric Capital, Blockworks and more.</p>
+                    <p class="body-p" data-reveal data-delay="5">I also know what that pace costs. I have hit the wall that every high-performer eventually hits when they never stop long enough to recover.</p>
+                    <p class="body-p" data-reveal data-delay="6">Burnout is not a motivation problem. It is a nervous system problem. I learned that the hard way. And now it is the only thing I work on.</p>
+
+                    <div class="credentials" data-reveal data-delay="6">
+                        <div class="cred-row">
+                            <span class="cred-label">Domain</span>
+                            <span class="cred-value">Web3 Recruitment &amp; Ecosystem Building</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-label">Background</span>
+                            <span class="cred-value">18 Years Competitive Athletics &middot; $10M+ Revenue</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-label">Conferences</span>
+                            <span class="cred-value">ETH Denver &middot; ETH CC</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-label">Performed For</span>
+                            <span class="cred-value">Coinbase &middot; Polkadot &middot; Galaxy &middot; Near Foundation</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-label">Podcast</span>
+                            <span class="cred-value">2 Years &middot; Dragonfly, Optimism, OpenSea, Blockworks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-footer">
+                <div class="section-footer-inner">
+                    <span>The Reset Protocol &copy; 2026</span>
+                    <span><a href="https://theresetprotocol.xyz">theresetprotocol.xyz</a></span>
+                    <span>Bali, Indonesia</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: RESULTS -->
+    <div class="section-page" id="section-results">
+        <button class="back-btn"><span class="arrow">&larr;</span> Back</button>
+        <a href="#" class="section-nav-cta" data-nav-apply>Apply</a>
+        <div class="section-inner">
+            <p class="section-label" data-reveal>// Field Data</p>
+
+            <div class="results-featured" data-reveal data-delay="1">
+                <div class="results-mark">&ldquo;</div>
+                <p class="results-quote">The only regret you will have is not working with him sooner.</p>
+                <p class="results-attr">Sophia &middot; Founder</p>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" data-reveal data-delay="2">
+                    <div>
+                        <div class="result-card-mark">&ldquo;</div>
+                        <p class="result-card-quote">After spending time with Remi, I felt a renewed sense of passion and purpose in everything I was doing. He has this ability to cut through the noise and help you see what actually matters.</p>
+                    </div>
+                    <p class="result-card-attr">Max &middot; Web3 Founder</p>
+                </div>
+                <div class="result-card" data-reveal data-delay="3">
+                    <div>
+                        <div class="result-card-mark">&ldquo;</div>
+                        <p class="result-card-quote">It just gave me more of a calm mind looking at the obstacles I need to beat in my life right now. I walked away with genuine clarity for the first time in months.</p>
+                    </div>
+                    <p class="result-card-attr">Nilo &middot; Founder</p>
+                </div>
+                <div class="result-card" data-reveal data-delay="4">
+                    <div>
+                        <div class="result-card-mark">&ldquo;</div>
+                        <p class="result-card-quote">Remi doesn't give you a framework and send you on your way. He sits with you in the mess until you can see clearly. That's rare and it's real.</p>
+                    </div>
+                    <p class="result-card-attr">Hugh &middot; Operator</p>
+                </div>
+            </div>
+
+            <div class="section-footer">
+                <div class="section-footer-inner">
+                    <span>The Reset Protocol &copy; 2026</span>
+                    <span><a href="https://theresetprotocol.xyz">theresetprotocol.xyz</a></span>
+                    <span>Bali, Indonesia</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: APPLY -->
+    <div class="section-page" id="section-apply">
+        <button class="back-btn"><span class="arrow">&larr;</span> Back</button>
+        <div class="section-inner" style="display: flex; flex-direction: column; justify-content: center;">
+            <div class="apply-content">
+                <p class="section-label" data-reveal>// Work with Remington</p>
+                <h2 class="apply-headline" data-reveal data-delay="1">You do not need<br>another framework.</h2>
+                <p class="apply-sub" data-reveal data-delay="2">You need a reset.</p>
+                <a href="https://calendar.app.google/8hKgf5JvKFuHb2Da7" target="_blank" rel="noopener noreferrer" class="apply-btn" data-reveal data-delay="3">Apply for the Reset</a>
+                <div class="apply-pricing" data-reveal data-delay="4">
+                    <p class="price-main">$1,500 &nbsp;&middot;&nbsp; Limited Spots &nbsp;&middot;&nbsp; Private 1:1</p>
+                    <p class="price-alt">3-Month Program available. $4,500.</p>
+                </div>
+            </div>
+
+            <div class="section-footer">
+                <div class="section-footer-inner">
+                    <span>The Reset Protocol &copy; 2026</span>
+                    <span><a href="https://theresetprotocol.xyz">theresetprotocol.xyz</a></span>
+                    <span>Bali, Indonesia</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================
+         SCRIPTS
+    ============================================= -->
+    <script>
+        // ==========================================
+        // CUSTOM CURSOR — teal dot, lerp lag
+        // ==========================================
+        const cursor = document.getElementById('cursor');
+        let mouseX = 0, mouseY = 0, cx = 0, cy = 0;
+
+        if (window.matchMedia('(pointer: fine)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursor.classList.add('visible');
+            });
+            document.addEventListener('mouseleave', () => cursor.classList.remove('visible'));
+
+            (function animateCursor() {
+                cx += (mouseX - cx) * 0.12;
+                cy += (mouseY - cy) * 0.12;
+                cursor.style.transform = `translate(${cx - 5}px, ${cy - 5}px)`;
+                requestAnimationFrame(animateCursor);
+            })();
+        }
+
+        // ==========================================
+        // HOME — CHARACTER REVEAL (word-grouped)
+        // ==========================================
+        (function charReveal() {
+            const headline = document.getElementById('home-headline');
+            if (!headline) return;
+
+            const lines = headline.querySelectorAll('.line');
+            const allChars = [];
+
+            function makeWord(text, parent) {
+                const wordSpan = document.createElement('span');
+                wordSpan.className = 'word';
+                text.split('').forEach(ch => {
+                    const s = document.createElement('span');
+                    s.className = 'char';
+                    s.textContent = ch;
+                    wordSpan.appendChild(s);
+                    allChars.push(s);
+                });
+                parent.appendChild(wordSpan);
+            }
+
+            lines.forEach(line => {
+                const accentSpan = line.querySelector('.accent');
+
+                if (accentSpan) {
+                    let beforeStr = '';
+                    const accentStr = accentSpan.textContent;
+                    Array.from(line.childNodes).forEach(n => {
+                        if (n !== accentSpan && n.nodeType === 3) beforeStr += n.textContent;
+                    });
+
+                    line.innerHTML = '';
+                    beforeStr.trim().split(/\s+/).forEach(w => { if (w) makeWord(w, line); });
+
+                    const wrap = document.createElement('span');
+                    wrap.className = 'accent';
+                    accentStr.trim().split(/\s+/).forEach(w => { if (w) { const ws = document.createElement('span'); ws.className = 'word'; w.split('').forEach(ch => { const s = document.createElement('span'); s.className = 'char'; s.textContent = ch; ws.appendChild(s); allChars.push(s); }); wrap.appendChild(ws); }});
+                    line.appendChild(wrap);
+                } else {
+                    const text = line.textContent;
+                    line.innerHTML = '';
+                    text.trim().split(/\s+/).forEach(w => { if (w) makeWord(w, line); });
+                }
+            });
+
+            const perChar = 1800 / allChars.length;
+            setTimeout(() => {
+                allChars.forEach((ch, i) => {
+                    setTimeout(() => ch.classList.add('revealed'), i * perChar);
+                });
+            }, 800);
+        })();
+
+        // ==========================================
+        // HOME NAV — HOVER BG PANELS + CLICK NAV
+        // ==========================================
+        const pills       = document.querySelectorAll('.home-nav li');
+        const panels      = document.querySelectorAll('.bg-panel');
+        const defaultPanel = document.querySelector('.bg-panel.bg-default');
+
+        pills.forEach(pill => {
+            const key = pill.dataset.section;
+
+            pill.addEventListener('mouseenter', () => {
+                panels.forEach(p => p.classList.remove('active'));
+                const target = document.querySelector(`.bg-panel[data-for="${key}"]`);
+                if (target) target.classList.add('active');
+                pill.classList.add('active');
+            });
+
+            pill.addEventListener('mouseleave', () => {
+                panels.forEach(p => p.classList.remove('active'));
+                defaultPanel.classList.add('active');
+                pill.classList.remove('active');
+            });
+
+            pill.addEventListener('click', () => openSection(key));
+        });
+
+        // Top nav Apply buttons
+        document.querySelectorAll('[data-nav-apply]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openSection('apply');
+            });
+        });
+
+        // ==========================================
+        // SECTION OPEN / CLOSE
+        // ==========================================
+        const sectionPages = document.querySelectorAll('.section-page');
+        const home = document.getElementById('home');
+
+        function openSection(key) {
+            const target = document.getElementById(`section-${key}`);
+            if (!target) return;
+
+            // Reset reveal states for this section
+            target.querySelectorAll('[data-reveal]').forEach(el => el.classList.remove('visible'));
+            target.querySelectorAll('.accent-line').forEach(el => el.classList.remove('visible'));
+
+            // Close any open section first
+            sectionPages.forEach(s => s.classList.remove('open'));
+
+            // Fade out home
+            home.classList.add('hidden');
+
+            // Open section
+            target.classList.add('open');
+            target.scrollTop = 0;
+
+            // Trigger reveals with stagger
+            setTimeout(() => {
+                target.querySelectorAll('[data-reveal]').forEach((el, i) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, i * 80);
+                });
+                target.querySelectorAll('.accent-line').forEach((el, i) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, 400 + i * 200);
+                });
+            }, 200);
+        }
+
+        function closeSection() {
+            sectionPages.forEach(s => s.classList.remove('open'));
+            home.classList.remove('hidden');
+        }
+
+        document.querySelectorAll('.back-btn').forEach(btn => {
+            btn.addEventListener('click', closeSection);
+        });
+
+        // Keyboard: Escape closes section
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeSection();
+        });
+
+        // ==========================================
+        // SCROLL-DIRECTION NAV HIDE (inside sections)
+        // ==========================================
+        sectionPages.forEach(page => {
+            let lastY = 0;
+            const backBtn = page.querySelector('.back-btn');
+            const navCta = page.querySelector('.section-nav-cta');
+
+            page.addEventListener('scroll', () => {
+                const y = page.scrollTop;
+                const hidden = y > 100 && y > lastY;
+
+                if (backBtn) {
+                    backBtn.style.opacity = hidden ? '0' : '1';
+                    backBtn.style.pointerEvents = hidden ? 'none' : 'all';
+                    backBtn.style.transition = 'opacity 0.4s ease';
+                }
+                if (navCta) {
+                    navCta.style.opacity = hidden ? '0' : '1';
+                    navCta.style.pointerEvents = hidden ? 'none' : 'all';
+                    navCta.style.transition = 'opacity 0.4s ease';
+                }
+                lastY = y;
+            }, { passive: true });
+        });
+    </script>
+
+</body>
+</html>
