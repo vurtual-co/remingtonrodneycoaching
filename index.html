@@ -155,10 +155,48 @@
 
         /* Hero headline — responsive sizing, no stair-step */
         .hero-headline {
-            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            font-size: clamp(2rem, 7vw, 2.75rem);
         }
         @media (min-width: 1024px) {
-            .hero-headline { font-size: clamp(3rem, 5vw, 4.25rem); }
+            .hero-headline { font-size: clamp(2.5rem, 4vw, 3.5rem); }
+        }
+
+        /* Hero CTA full-width on mobile */
+        @media (max-width: 639px) {
+            .hero-cta { width: 100%; }
+        }
+
+        /* Logo strip */
+        .logo-ticker-wrap {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+        }
+        .logo-ticker-track {
+            display: flex;
+            width: max-content;
+            animation: logoTicker 35s linear infinite;
+            align-items: center;
+        }
+        @keyframes logoTicker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .client-logo {
+            max-height: 38px;
+            width: auto;
+            opacity: 0.65;
+            transition: opacity 0.3s ease;
+        }
+        .client-logo:hover { opacity: 1; }
+        .client-logo.lighten {
+            mix-blend-mode: lighten;
+            filter: grayscale(100%) brightness(1.6);
+        }
+        .client-logo.invert {
+            filter: brightness(0) invert(1) grayscale(1);
         }
     </style>
 </head>
@@ -178,32 +216,60 @@
     </nav>
 
     <!-- HERO -->
-    <section id="hero" class="relative flex items-center border-b border-border-subtle px-6 md:px-12 pt-32 pb-20 md:pt-40 md:pb-28" style="min-height: 88vh;">
-        <div class="max-w-[1100px] mx-auto w-full reveal">
-            <h1 class="font-heading text-primary uppercase font-medium" style="letter-spacing: -0.01em; line-height: 1.04;">
-                <span class="block hero-headline">Web3 doesn't have</span>
-                <span class="block hero-headline">an off switch.</span>
-                <span class="block hero-headline">But you do.</span>
-            </h1>
-            <p class="font-body text-primary/75 leading-relaxed max-w-xl mt-7 mb-9" style="font-size: clamp(1rem, 2vw, 1.2rem);">
-                A private 3-session reset for the Web3 industry running on empty.
-            </p>
-            <div>
-                <a href="https://calendar.app.google/8hKgf5JvKFuHb2Da7" target="_blank" rel="noopener noreferrer" class="btn-primary">BOOK A CALL</a>
+    <section id="hero" class="relative border-b border-border-subtle px-6 md:px-12 pt-28 pb-16 md:pt-36 md:pb-24">
+        <div class="max-w-[1240px] mx-auto w-full reveal">
+            <div class="flex flex-col-reverse lg:flex-row lg:items-center gap-10 md:gap-12 lg:gap-16">
+                <!-- Text column -->
+                <div class="w-full lg:w-[58%]">
+                    <h1 class="font-heading text-primary uppercase font-semibold" style="letter-spacing: -0.01em; line-height: 1.06;">
+                        <span class="hero-headline">Stillness is the ultimate competitive advantage.</span>
+                    </h1>
+                    <p class="font-body text-primary/75 leading-relaxed max-w-xl mt-6 mb-9" style="font-size: clamp(1rem, 2vw, 1.2rem);">
+                        For high performers who are succeeding on the outside and scattered on the inside.
+                    </p>
+                    <div>
+                        <a href="https://calendar.app.google/8hKgf5JvKFuHb2Da7" target="_blank" rel="noopener noreferrer" class="btn-primary hero-cta">BOOK A CALL</a>
+                    </div>
+                </div>
+
+                <!-- Image column -->
+                <div class="w-full lg:w-[42%]">
+                    <div class="relative w-full overflow-hidden" style="background-color: #0D0D0D;">
+                        <img src="resetprotocol/assets/Hero Page.JPG" alt="Remington Rodney" class="w-full block" style="height: auto; object-fit: cover;">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- TAGLINE -->
+    <div class="relative z-10 px-6 md:px-12 py-12 md:py-16 border-b border-border-subtle text-center">
+        <p class="font-serif italic max-w-2xl mx-auto" style="color: #888888; font-size: clamp(1rem, 2vw, 1.25rem); line-height: 1.5;">
+            "The greatest performance killer isn't burnout. It's the mind that never stops."
+        </p>
+    </div>
+
     <!-- RECENT CLIENTS -->
-    <div class="relative z-10 px-6 md:px-12 py-12 md:py-14 border-b border-border-subtle" style="background: #111111;">
-        <div class="max-w-[1100px] mx-auto">
-            <p class="section-label mb-8 md:mb-10">// RECENT CLIENTS</p>
-            <div class="flex flex-col md:flex-row md:items-center md:flex-wrap gap-y-4 gap-x-10">
-                <span class="font-heading text-primary text-base md:text-lg font-medium">Research Lead, Delphi Labs</span>
-                <span class="hidden md:inline text-white/15">&middot;</span>
-                <span class="font-heading text-primary text-base md:text-lg font-medium">Project Manager, ConsenSys</span>
-                <span class="hidden md:inline text-white/15">&middot;</span>
-                <span class="font-heading text-primary text-base md:text-lg font-medium">GTM Lead, Keyring Network</span>
+    <div class="relative z-10 py-10 md:py-12 border-b border-border-subtle overflow-hidden" style="background: #111111;">
+        <div class="max-w-[1240px] mx-auto px-6 md:px-12 mb-8 md:mb-10">
+            <p class="section-label">// RECENT CLIENTS</p>
+        </div>
+        <div class="logo-ticker-wrap">
+            <div class="logo-ticker-track">
+                <span class="flex items-center gap-12 md:gap-16 whitespace-nowrap pr-12 md:pr-16">
+                    <img src="Logo's for companies/Consensys logo.png" alt="ConsenSys" class="client-logo invert">
+                    <img src="logos/Chainlink.svg" alt="Chainlink" class="client-logo invert">
+                    <img src="logos/delphi-cover.jpg" alt="Delphi Digital" class="client-logo lighten">
+                    <img src="logos/avpabijlvmutfhskxb2v.jpg" alt="Keyring Network" class="client-logo lighten">
+                    <img src="logos/images.png" alt="Ohio State" class="client-logo lighten">
+                </span>
+                <span class="flex items-center gap-12 md:gap-16 whitespace-nowrap pr-12 md:pr-16" aria-hidden="true">
+                    <img src="Logo's for companies/Consensys logo.png" alt="" class="client-logo invert">
+                    <img src="logos/Chainlink.svg" alt="" class="client-logo invert">
+                    <img src="logos/delphi-cover.jpg" alt="" class="client-logo lighten">
+                    <img src="logos/avpabijlvmutfhskxb2v.jpg" alt="" class="client-logo lighten">
+                    <img src="logos/images.png" alt="" class="client-logo lighten">
+                </span>
             </div>
         </div>
     </div>
