@@ -180,6 +180,9 @@
             animation: logoTicker 35s linear infinite;
             align-items: center;
         }
+        @media (max-width: 767px) {
+            .logo-ticker-track { animation-duration: 15s; }
+        }
         @keyframes logoTicker {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
